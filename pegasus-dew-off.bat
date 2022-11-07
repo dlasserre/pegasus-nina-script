@@ -1,0 +1,1 @@
+powershell -Command "& 'C:\Users\Damien Lasserre\Desktop\pegasus.ps1' -Command dew -State 0 -Port 1 -Name PPBAdvance

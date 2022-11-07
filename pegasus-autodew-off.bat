@@ -1,0 +1,1 @@
+powershell -Command "& 'C:\Users\Damien Lasserre\Desktop\pegasus.ps1' -Command auto-dew -State 0 -name PPBAdvance
