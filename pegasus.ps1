@@ -39,8 +39,14 @@ function setDew {
 
     if ($state) 
         {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/On/Max?DriverUniqueKey=$uniqueKey" -Method PUT}
-    else
-        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/Off?DriverUniqueKey=$uniqueKey" -Method PUT}
+    else 
+        {
+            $Check = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/Auto?DriverUniqueKey=$uniqueKey" -Method GET
+            if ($Check.data.message.switch.state -eq 'ON') {
+                setAutoDew 0 PPBAdvance
+            }
+            $Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/Off?DriverUniqueKey=$uniqueKey" -Method PUT
+        }
 }
 
 function setAutoDew {
@@ -77,7 +83,4 @@ Switch($Command)
     "dew" {
         setDew $Port $State $Name
     }
-    "get"
 }
-
-
