@@ -36,17 +36,15 @@ function setDew {
     )
 
     $uniqueKey = getUniqueKeyFromName $name
-
-    if ($state) 
-        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/On/Max?DriverUniqueKey=$uniqueKey" -Method PUT}
-    else 
-        {
-            $Check = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/Auto?DriverUniqueKey=$uniqueKey" -Method GET
-            if ($Check.data.message.switch.state -eq 'ON') {
-                setAutoDew 0 PPBAdvance
-            }
-            $Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/Off?DriverUniqueKey=$uniqueKey" -Method PUT
+    if ($state) {
+        $Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/On/Max?DriverUniqueKey=$uniqueKey" -Method PUT
+    }else {
+        $Check = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/Auto?DriverUniqueKey=$uniqueKey" -Method GET
+        if ($Check.data.message.switch.state -eq 'ON') {
+            setAutoDew 0 PPBAdvance
         }
+        $Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Dew/1/Off?DriverUniqueKey=$uniqueKey" -Method PUT
+    }
 }
 
 function setAutoDew {
@@ -54,7 +52,6 @@ function setAutoDew {
         [Boolean] $state,
         [String] $name
     )
-
     $uniqueKey = getUniqueKeyFromName $name
 
     if ($state) 
@@ -74,6 +71,30 @@ function getDevicesConnected {
     }
 }
 
+function setAdjustable {
+    param(
+        [Boolean] $state,
+        [String] $name
+    )
+    $uniqueKey = getUniqueKeyFromName $name
+    if ($state) 
+        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Power/Variable/On?DriverUniqueKey=$uniqueKey" -Method PUT}
+    else
+        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Power/Variable/Off?DriverUniqueKey=$uniqueKey" -Method PUT}
+}
+
+function setPower {
+    param(
+        [Boolean] $state,
+        [String] $name
+    )
+    $uniqueKey = getUniqueKeyFromName $name
+    if ($state) 
+        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Power/Hub/On?DriverUniqueKey=$uniqueKey" -Method PUT}
+    else
+        {$Result = Invoke-RestMethod -Uri "$global:url/Driver/PPBAdvance/Power/Hub/Off?DriverUniqueKey=$uniqueKey" -Method PUT}
+}
+
 Switch($Command)
 {
     "connected-devices" { return getDevicesConnected }
@@ -82,5 +103,11 @@ Switch($Command)
     }
     "dew" {
         setDew $Port $State $Name
+    }
+    "adjustable" {
+        setAdjustable $State $Name
+    }
+    "power" {
+        setPower $State $Name
     }
 }
