@@ -1,0 +1,1 @@
+powershell -Command "& 'C:\Users\Damien Lasserre\Desktop\pegasus.ps1' -Command adjustable -State 1 -name PPBAdvance
